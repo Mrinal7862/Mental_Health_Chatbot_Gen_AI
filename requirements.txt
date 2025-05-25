@@ -1,11 +1,14 @@
-sentence-transformers==2.2.2
+sentence-transformers
 langchain
 flask
 pypdf
 python-dotenv
-pinecone[grpc]
-langchain_pinecone
-langchain_community
-langchain_openai
-langchain_experimental
--e .
+pinecone
+langchain-community           
+langchain-openai             
+langchain-experimental        
+langchain-pinecone            
+pyreadline3                  
+cohere       
+langchain-cohere   
+-e .                       

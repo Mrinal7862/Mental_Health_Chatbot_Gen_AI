@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MediBot Chat</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-wrapper {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 1rem;
+      background-color: #ffffff;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      background-color: #ffffff;
+      padding: 2rem;
+    }
+
+    .chat-message {
+      max-width: 80%;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      word-wrap: break-word;
+      font-size: 1.25rem;
+    }
+
+    .bot-message {
+      background-color: #e9ecef;
+      align-self: flex-start;
+    }
+
+    .user-message {
+      background-color: #0d6efd;
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .chat-input-area {
+      padding: 1rem;
+      background-color: #ffffff;
+      border-top: 1px solid #dee2e6;
+    }
+
+    .chat-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .chat-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: #0d6efd;
+    }
+
+    @media (max-width: 768px) {
+      .chat-message {
+        font-size: 1rem;
+        max-width: 90%;
+      }
+
+      .chat-box {
+        padding: 1rem;
+      }
+
+      .chat-icon {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="chat-wrapper">
+    <!-- Header -->
+    <div class="chat-header d-flex justify-content-between align-items-center px-4">
+      <h3 class="mb-0 d-flex align-items-center">
+        <span class="me-2 chat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#0d6efd" viewBox="0 0 16 16">
+            <path d="M8 1a1 1 0 0 1 1 1v5h5a1 1 0 0 1 0 2H9v5a1 1 0 0 1-2 0V9H2a1 1 0 0 1 0-2h5V2a1 1 0 0 1 1-1z"/>
+          </svg>
+        </span>
+        AARC-Medibot
+      </h3>
+      <button class="btn btn-outline-primary btn-sm">By Mrinal Devanth</button>
+    </div>
+
+    <!-- Chat Body -->
+    <div id="chat-body" class="chat-box d-flex flex-column">
+      <div class="d-flex align-items-start mb-3">
+        <div class="chat-icon me-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+            <path d="M8 1a1 1 0 0 1 1 1v5h5a1 1 0 0 1 0 2H9v5a1 1 0 0 1-2 0V9H2a1 1 0 0 1 0-2h5V2a1 1 0 0 1 1-1z"/>
+          </svg>
+        </div>
+        <div class="chat-message bot-message">
+          Hello! 👋 I'm MediBot. How can I help you today?
+        </div>
+      </div>
+
+      <div class="text-center text-muted small my-2">Today</div>
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input-area px-4">
+      <div class="input-group">
+        <span class="input-group-text bg-white">
+          <i class="bi bi-person-circle text-primary fs-5"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleFormControlInput1"
+          placeholder="Type your message..."
+        />
+        <button class="btn btn-primary" id="send-btn">
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Chat Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const inputField = document.getElementById("exampleFormControlInput1");
+      const chatBody = document.getElementById("chat-body");
+      const sendButton = document.getElementById("send-btn");
+
+      function appendMessage(content, type = "user") {
+        const msgWrapper = document.createElement("div");
+        msgWrapper.className = `d-flex align-items-start ${
+          type === "user" ? "justify-content-end" : "justify-content-start"
+        } mb-3`;
+
+        const botIcon = `
+          <div class="chat-icon me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+              <path d="M8 1a1 1 0 0 1 1 1v5h5a1 1 0 0 1 0 2H9v5a1 1 0 0 1-2 0V9H2a1 1 0 0 1 0-2h5V2a1 1 0 0 1 1-1z"/>
+            </svg>
+          </div>`;
+
+        const userIcon = `
+          <i class="bi bi-person-circle text-primary fs-4 ms-3"></i>
+        `;
+
+        const messageClass = type === "user" ? "user-message" : "bot-message";
+
+        msgWrapper.innerHTML = `
+          ${type === "bot" ? botIcon : ""}
+          <div class="chat-message ${messageClass}">${content}</div>
+          ${type === "user" ? userIcon : ""}
+        `;
+
+        chatBody.appendChild(msgWrapper);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      function sendMessage() {
+        const userMessage = inputField.value.trim();
+        if (!userMessage) return;
+
+        appendMessage(userMessage, "user");
+        inputField.value = "";
+
+        fetch("/get", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ msg: userMessage }),
+        })
+          .then((res) => res.text())
+          .then((reply) => {
+            appendMessage(reply, "bot");
+          })
+          .catch((err) => console.error("Error:", err));
+      }
+
+      sendButton.addEventListener("click", sendMessage);
+      inputField.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
